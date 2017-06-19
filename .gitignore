@@ -1,0 +1,30 @@
+# Plot 1
+table<-read.table("household_power_consumption.txt",sep=";",header = TRUE,na.strings = "?")
+table$Date<-as.Date(table$Date,"%d/%m/%Y")
+table<-subset(table,Date>=as.Date("2007-02-01") & Date<=as.Date("2007-02-02"))
+table<-table[complete.cases(table),]
+hist(table$Global_active_power,main = "Global Active Power",xlab = "Global Active Power(kilowatts)",col="red")
+
+# Plot 2
+table$weekday<-paste(table$Date,table$Time)
+table$weekday<-as.POSIXct(table$weekday)
+plot(table$Global_active_power~table$weekday,ylab = "Global Active Power(kilowatts)",type="l")
+
+# Plot 3
+plot(table$Sub_metering_1~table$weekday,type="l",ylab = "Global Active Power(kilowatts)")
+  lines(table$Sub_metering_2~table$weekday,col='Red')
+  lines(table$Sub_metering_3~table$weekday,col='Blue')
+  
+legend("topright",lty=c(1,1,1),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),
+       col=c("Black","Red","Blue"),ncol=1)
+       
+# Plot 4
+par(mfrow=c(2,2),mar=c(4,4,2,1))
+plot(table$Global_active_power~table$weekday,type="l",ylab = "Global Active Power",xlab="")
+plot(table$Voltage~table$weekday,type="l",ylab = "Voltage",xlab="")
+plot(table$Sub_metering_1~table$weekday,type="l",ylab = "Global Active Power(kilowatts)")
+lines(table$Sub_metering_2~table$weekday,col='Red')
+lines(table$Sub_metering_3~table$weekday,col='Blue')
+legend("topright",lty=c(1,1,1),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),
+       col=c("Black","Red","Blue"),ncol=1,cex = 0.5)
+plot(table$Global_reactive_power~table$weekday,type="l",ylab = "Global Reactive Power",xlab="")
